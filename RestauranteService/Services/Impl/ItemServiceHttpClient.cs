@@ -1,24 +1,25 @@
 ﻿using RestauranteService.Dtos;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace RestauranteService.Services
 {
     public class ItemServiceHttpClient : IItemServiceHttpClient
     {
         private readonly HttpClient _client;
+        private readonly IConfiguration _configuration;
 
-        public ItemServiceHttpClient(HttpClient client)
+        public ItemServiceHttpClient(HttpClient client, IConfiguration configuration)
         {
             _client = client;
+            _configuration = configuration;
         }
 
-        public void EnviaRestaurante(RestauranteReadDto restauranteReadDto)
+        public async void EnviaRestaurante(RestauranteReadDto restauranteReadDto)
         {
             var conteudo = new StringContent(JsonSerializer.Serialize(restauranteReadDto), Encoding.UTF8, "application/json");
 
-            throw new NotImplementedException();
+            await _client.PostAsync(_configuration["ItemService"],conteudo);
         }
     }
 }
