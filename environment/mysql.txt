@@ -1,1 +1,1 @@
-docker run --name restaurante-db -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=restaurantedb -p 3306:3306  -p 33060:33060 -d mysql 
+docker run --name restaurante-db --network restaurante-bridge -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=restaurantedb -p 3306:3306  -p 33060:33060 -d mysql 
