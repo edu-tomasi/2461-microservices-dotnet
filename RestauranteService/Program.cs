@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("RestauranteConnection");
 
+Console.WriteLine($"-> ConnectionString: {connectionString}");
+
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IRestauranteRepository, RestauranteRepository>();
