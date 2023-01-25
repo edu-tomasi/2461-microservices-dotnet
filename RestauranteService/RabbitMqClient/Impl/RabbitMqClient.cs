@@ -1,5 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RestauranteService.Dtos;
+using System.Text;
+using System.Text.Json;
 
 namespace RestauranteService.RabbitMqClient
 {
@@ -12,14 +14,17 @@ namespace RestauranteService.RabbitMqClient
         public RabbitMqClient(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connection = new ConnectionFactory() { HostName = _configuration["RabbitMqHost"], Port = 8200 }.CreateConnection();
+            _connection = new ConnectionFactory() { HostName = _configuration["RabbitMqHost"], Port = int.Parse(_configuration["RabbitMqPort"]) }.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
         }
 
         public void PublicaRestaurante(RestauranteReadDto restaurante)
         {
-            throw new NotImplementedException();
+            var message = JsonSerializer.Serialize(restaurante);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            _channel.BasicPublish(exchange: "trigger", routingKey: "", body: body);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RestauranteService.Data;
 using RestauranteService.Dtos;
 using RestauranteService.Models;
+using RestauranteService.RabbitMqClient;
 using RestauranteService.Services;
 
 namespace RestauranteService.Controllers;

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RestauranteService.Data;
+using RestauranteService.RabbitMqClient;
 using RestauranteService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ Console.WriteLine($"-> ConnectionString: {connectionString}");
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IRestauranteRepository, RestauranteRepository>();
+
+builder.Services.AddSingleton<IRabbitMqClient, RabbitMqClient>();
 
 builder.Services.AddHttpClient<IItemServiceHttpClient, ItemServiceHttpClient>();
 
