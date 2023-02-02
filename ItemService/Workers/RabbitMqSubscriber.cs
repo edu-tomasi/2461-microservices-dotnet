@@ -16,7 +16,10 @@ namespace ItemService.Workers
         public RabbitMqSubscriber(IConfiguration configuration, IProcessaEvento processaEvento)
         {
             _configuration = configuration;
-            _connection = new ConnectionFactory() { HostName = "localhost", Port = 8002 }.CreateConnection();
+            _connection = new ConnectionFactory() { 
+                HostName = _configuration["RabbitMQHost"], 
+                Port = int.Parse(_configuration["RabbitMQPort"])
+            }.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
             _nomeDaFila = _channel.QueueDeclare().QueueName;
@@ -32,6 +35,10 @@ namespace ItemService.Workers
                 string? mensagem = Encoding.UTF8.GetString(body.ToArray());
                 _processaEvento.Processa(mensagem);
             };
+
+            _channel.BasicConsume(_nomeDaFila, true, consumidor); 
+
+            return Task.CompletedTask;
         }
     }
 }
